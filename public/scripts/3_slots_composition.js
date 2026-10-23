@@ -1,55 +1,92 @@
-const profileCardTemplate = document.createElement("template");
-profileCardTemplate.innerHTML = `
-	<style>
-		:host {
-			display: block;
-			max-width: 32rem;
-			margin-block: 1rem;
-			padding: 1rem;
-			border: 1px solid #9aa6b2;
-			border-radius: 0.5rem;
-			font: 1rem/1.5 system-ui, sans-serif;
-		}
+/**
+ * user card - named slots example
+ */
 
-		header {
-			padding-block-end: 0.75rem;
-			border-block-end: 1px solid #d5dce1;
-		}
-
-		h2, p {
-			margin: 0;
-		}
-
-		[name="role"] {
-			color: #52616b;
-		}
-
-		::slotted(p) {
-			margin-block: 0.75rem 0;
-		}
-	</style>
-	<header>
-		<h2><slot name="name">Unnamed profile</slot></h2>
-		<p><slot name="role">No role provided</slot></p>
-	</header>
-	<slot></slot>
-`;
-
-class ProfileCard extends HTMLElement {
-	constructor() {
-		super();
-		this.attachShadow({ mode: "open" });
-		this.shadowRoot.append(profileCardTemplate.content.cloneNode(true));
+customElements.define('user-card', class extends HTMLElement {
+	connectedCallback() {
+		this.attachShadow({mode: 'open'});
+		this.shadowRoot.innerHTML = `
+			<div>
+				Name: <slot name="username">Nonny Mouse</slot>
+			</div>
+			<div>
+				Birthday: <slot name="birthday">31.01.1969</slot>
+			</div>
+			<fieldset>
+				<legend>Other stuff</legend>
+				<slot>N/A</slot>
+			</fieldset>
+		`;
 	}
+});
+
+/**
+ * Custom Menu slots example
+ */
+const customMenuTemplate = document.getElementById('custom-menu-template');
+
+customElements.define('custom-menu', class extends HTMLElement {
+	connectedCallback() {
+		this.attachShadow({mode: 'open'});
+		this.shadowRoot.append(customMenuTemplate.content.cloneNode(true));
+		this.shadowRoot.querySelector('slot[name="title"').onclick = () => {
+			this.shadowRoot.querySelector('.menu').classList.toggle('closed');
+		}
+	}
+});
+
+/**
+ * Custom menu dynamic insertion example
+ */
+
+customElements.define('custom-menu-dynamic', class extends HTMLElement {
+	connectedCallback() {
+		this.attachShadow({mode: 'open'});
+		this.shadowRoot.innerHTML = `<div class="menu">
+			<slot name="title"></slot>
+			<ul><slot name="item"></slot></ul>
+		</div>`;
+
+		this.shadowRoot.firstElementChild.addEventListener('slotchange', e => alert('slotchange: '+ e.target.name));
+	}
+});
+
+const dynamicMenu = document.getElementById("dynamic-menu");
+
+setTimeout(() => {
+	dynamicMenu.insertAdjacentHTML('beforeend', '<li slot="item">Lollipop</li>')
+}, 3000);
+
+setTimeout(() => {
+	dynamicMenu.querySelector('[slot="title"]').innerHTML = "New menu";
+}, 5000);
+
+/**
+ * Custom Menu slots API example
+ */
+
+customElements.define('custom-menu-slots-api', class extends HTMLElement {
+	items = [];
 
 	connectedCallback() {
-		this.shadowRoot.querySelectorAll("slot").forEach((slot) => {
-			slot.addEventListener("slotchange", () => {
-				const status = document.querySelector("#slot-status");
-				status.textContent = `Content assigned to the ${slot.name || "default"} slot.`;
-			});
-		});
-	}
-}
+		this.attachShadow({mode: 'open'});
+		this.shadowRoot.innerHTML = `<div class="menu">
+			<slot name="title"></slot>
+			<ul><slot name="item"></slot</ul>
+		</div>`;
 
-customElements.define("profile-card", ProfileCard);
+		this.shadowRoot.firstElementChild.addEventListener('slotchange', e => {
+			let slot = e.target;
+			if (slot.name == 'item') {
+				this.items = slot.assignedElements().map(elem => elem.textContent);
+				console.log("items: " + this.items);
+			}
+		})
+	}
+});
+
+const slotsAPIMenu = document.getElementById("slots-api-menu");
+
+setTimeout(() => {
+	slotsAPIMenu.insertAdjacentHTML('beforeend', '<li slot="item">Taffy</li>')
+},7000);

@@ -3,11 +3,59 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="./styles/shared.css">
 		<title>Web Components - Shadow DOM Slots &amp; Composition</title>
 	</head>
 	<body>
 		<h1>Shadow DOM Slots &amp; Composition</h1>
 
+		<user-card>
+			<div>made this demo</div>
+			<span slot="username">Isi May</span>
+			<span slot="birthday">27.04.1994</span>
+			did some other stuff too
+		</user-card>
+		<br/>
+		<!-- multiple entries into the same slot concatenates in that slot -->
+		<user-card>
+			<span slot="username">John</span>
+			<span slot="username">&nbsp;Smith</span>
+			<span slot="birthday">01</span>
+			<span slot="birthday">.01</span>
+			<span slot="birthday">.2001</span>
+			<!-- N/A fallback for nameless slot doesn't apply if 
+				there's other named slots... -->
+		</user-card>
+		<br/>
+		<!-- fallback content -->
+		<user-card></user-card>
+
+		<template id="custom-menu-template">
+			<style>
+				.menu.closed {display: none;}
+				slot[name="title"]:has(+.menu:not(.closed))::after {content: ' - x';}
+			</style>
+			<slot name="title"></slot>
+			<div class="menu">
+				<ul><slot name="item"></slot></ul>
+			</div>
+		</template>
+
+		<custom-menu>
+			<span slot="title">Candy menu - Basic</span>
+			<li slot="item">Lollipop</li>
+			<li slot="item">Bubblegum</li>
+			<li slot="item">Taffy</li>
+			<li slot="item">Jawbreaker</li>
+		</custom-menu>
+
+		<custom-menu-dynamic id="dynamic-menu">
+			<span slot="title">Candy menu - Dynamic</span>
+		</custom-menu-dynamic>
+
+		<custom-menu-slots-api id="slots-api-menu">
+			<span slot="title">Candy menu - Slots API</span>
+		</custom-menu-slots-api>
 		<script src="./scripts/shared.js"></script>
 		<script src="./scripts/3_slots_composition.js"></script>
 	</body>
