@@ -7,6 +7,22 @@
     </head>
     <body>
         <h1>Custom Elements</h1>
+
+        <time-formatted id="elem"
+            year="numeric" month="long" day="numeric"
+            hour="numeric" minute="numeric" second="numeric"
+            timezone-name="short">
+        </time-formatted>
+
+        <user-info id="info"></user-info>
+
+        <br/>
+        <button is="hello-button">
+            say hello
+        </button>
+        <button is="hello-button" disabled>
+            you can't say hello
+        </button>
         <script src="./scripts/shared.js"></script>
         <script src="./scripts/1_custom_elements.js"></script>
     </body>
