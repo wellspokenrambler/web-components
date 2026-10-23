@@ -8,6 +8,16 @@
     </head>
     <body>
         <h1>Shadow DOM &amp; Events</h1>
+
+        <user-card></user-card>
+
+        <user-card-slots id="user-card-slots">
+            <span slot="username">Smon Jith</span>
+        </user-card-slots>
+
+        <div id="outer">
+        </div>
+
         <script src="./scripts/shared.js"></script>
         <script src="./scripts/5_events.js"></script>
     </body>
