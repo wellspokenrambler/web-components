@@ -1,42 +1,36 @@
-const shadowCardTemplate = document.createElement("template");
-shadowCardTemplate.innerHTML = `
-	<style>
-		:host {
-			display: block;
-			max-width: 32rem;
-			margin-block: 1rem;
-			padding: 1rem;
-			border: 1px solid #9aa6b2;
-			border-radius: 0.5rem;
-			color: #17212b;
-			background: #f4f7f8;
-			font: 1rem/1.5 system-ui, sans-serif;
-		}
+/**
+ * Show Hello (basic shadow DOM element)
+ */
+customElements.define('show-hello', class extends HTMLElement {
+	connectedCallback() {
+		const shadow = this.attachShadow({mode: 'open'});
+		shadow.innerHTML = `<p>
+			Hello, ${this.getAttribute('name')}!
+		</p>`
+	}
+});
 
-		h2 {
-			margin: 0 0 0.5rem;
-			font-size: 1.1rem;
-		}
+/**
+ * encapsulated CSS in a shadow DOM
+ */
+const encapsulated = document.getElementById('encapsulated');
 
-		p {
-			margin: 0;
-		}
-	</style>
-	<h2></h2>
-	<p><slot></slot></p>
+encapsulated.attachShadow({mode: 'open'});
+encapsulated.shadowRoot.innerHTML = `
+	<style> p {color: olive;}</style>
+	<p>Hello, Olive!
+	<br/>
+	(I'm in the shadow DOM so I'm doing my own, encapsulated thing)</p>
 `;
 
-class ShadowCard extends HTMLElement {
-	constructor() {
-		super();
-		this.attachShadow({ mode: "open" });
-		this.shadowRoot.append(shadowCardTemplate.content.cloneNode(true));
-	}
+/**
+ * template shadow DOM
+ */
+const template = document.getElementById('template');
+const templatedElem = document.getElementById('templated-elem');
 
-	connectedCallback() {
-		this.shadowRoot.querySelector("h2").textContent =
-			this.getAttribute("heading") || "Shadow card";
-	}
+templatedElem.onclick = function() {
+	templatedElem.attachShadow({mode: 'open'});
+	templatedElem.shadowRoot.append(template.content.cloneNode(true));
+	templatedElem.shadowRoot.getElementById('message').innerHTML = "Hello from the shadows oooo"
 }
-
-customElements.define("shadow-card", ShadowCard);

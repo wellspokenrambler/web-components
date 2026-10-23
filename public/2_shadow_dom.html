@@ -4,9 +4,28 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Web Components - Shadow DOM</title>
+		<style>
+			p {
+				font-weight: bold;
+			}
+		</style>
 	</head>
 	<body>
 		<h1>Shadow DOM</h1>
+
+		<show-hello name="World"></show-hello>
+
+		<p>I'm not in the shadow DOM - and I feel bold about it!</p>
+
+		<div id="encapsulated"></div>
+
+		<template id="template">
+			<style> p {color: darkslategrey;font-style: oblique;}</style>
+			<p id="message"></p>
+		</template>
+
+		<div id="templated-elem">gimme a click</div>
+
 		<script src="./scripts/shared.js"></script>
 		<script src="./scripts/2_shadow_dom.js"></script>
 	</body>
