@@ -5,9 +5,63 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./styles/shared.css">
         <title>Web Components - Shadow DOM Styling</title>
+        <style>
+            user-card {
+                --user-card-field-color: green;
+            }
+
+            span{font-weight: bold;}
+        </style>
     </head>
     <body>
         <h1>Shadow DOM Styling</h1>
+        <template id="custom-dialog-template">
+            <style>
+                :host([centred]) {
+                    position: fixed;
+                    left: 50%;
+                    top: 60%;
+                    transform: translate(-50%, -50%);
+                    background-color: white;
+                    border-color: hotpink;
+                }
+                :host {
+                    display: inline-block;
+                    border: 1px solid olivedrab;
+                    padding: 10px;
+                }
+            </style>
+            <slot></slot>
+        </template>
+
+        <custom-dialog>
+            Howdy
+        </custom-dialog>
+
+        <custom-dialog centred>
+            Howdy (centred)
+        </custom-dialog>
+
+        <user-card>
+            <div slot="username">
+                <span>
+                    Fred Fnargson
+                    (the shadow DOM's trying to apply a red bg to me but its not working)
+                </span>
+            </div>
+            <div slot="birthday">
+                <span>
+                    01.01.2001
+                    (the shadow DOM is successfully styling this purple via the slot)
+                </span>
+            </div>
+        </user-card>
+
+        shadow DOM's applying a grey bg to all divs in the slots
+        <br/>
+        it's also trying to apply stupid styles to all spans in divs in the slots 
+        but thankfully that isnt working
+
         <script src="./scripts/shared.js"></script>
         <script src="./scripts/4_styling.js"></script>
     </body>
